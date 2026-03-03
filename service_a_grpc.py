@@ -10,7 +10,10 @@ class HelloService(hello_pb2_grpc.HelloServiceServicer):
         return hello_pb2.HelloResponse(
             message=f"Hello {request.name} from Service A (gRPC)"
         )
-    
+    def AddNumbers(self, request, context):
+        print(f"Service A received numbers: {request.num1} and {request.num2}")
+        result = request.num1 + request.num2
+        return hello_pb2.AddResponse(result=result)
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

@@ -39,12 +39,23 @@ class HelloServiceStub(object):
                 request_serializer=hello__pb2.HelloRequest.SerializeToString,
                 response_deserializer=hello__pb2.HelloResponse.FromString,
                 _registered_method=True)
+        self.AddNumbers = channel.unary_unary(
+                '/hello.HelloService/AddNumbers',
+                request_serializer=hello__pb2.AddRequest.SerializeToString,
+                response_deserializer=hello__pb2.AddResponse.FromString,
+                _registered_method=True)
 
 
 class HelloServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def SayHello(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddNumbers(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -57,6 +68,11 @@ def add_HelloServiceServicer_to_server(servicer, server):
                     servicer.SayHello,
                     request_deserializer=hello__pb2.HelloRequest.FromString,
                     response_serializer=hello__pb2.HelloResponse.SerializeToString,
+            ),
+            'AddNumbers': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddNumbers,
+                    request_deserializer=hello__pb2.AddRequest.FromString,
+                    response_serializer=hello__pb2.AddResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -86,6 +102,33 @@ class HelloService(object):
             '/hello.HelloService/SayHello',
             hello__pb2.HelloRequest.SerializeToString,
             hello__pb2.HelloResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def AddNumbers(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/hello.HelloService/AddNumbers',
+            hello__pb2.AddRequest.SerializeToString,
+            hello__pb2.AddResponse.FromString,
             options,
             channel_credentials,
             insecure,
